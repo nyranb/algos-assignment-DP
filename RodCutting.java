@@ -5,12 +5,53 @@ public class RodCutting {
 
   // Do not change the parameters!
   public int rodCuttingRecur(int rodLength, int[] lengthPrices) {
-    return 0;
+    //initialize arr for memoization
+    int [] memo = new int[lengthPrices.length+1];
+
+    //set all values to -1 for comparison later
+    for(int i=0; i<=lengthPrices.length;i++) {
+	      memo[i] = -1;
+	  }
+	    return rodCuttingRecurAux(lengthPrices, rodLength, memo);
+	  }
+
+  //memoization helper function
+	public int rodCuttingRecurAux(int[] prices, int rodLength, int[] memo) {
+    int result;
+
+    //memoization initialization
+    if(memo[rodLength]>=0) {
+	      return memo[rodLength];
+	    }
+
+      //base case - if the rodlength is 0, return 0
+	    if(rodLength==0) {
+	      result = 0;
+	    } else {
+  	    result = Integer.MIN_VALUE;
+  	    for(int i=0; i<rodLength; i++) {
+          //break rod into pieces and find best prices with choosen combinations
+          //set result to highest price
+          result=Math.max(result, prices[i]+rodCuttingRecurAux(prices,rodLength-(i+1),memo));
+  	    }
+	    }
+	    memo[rodLength] = result;
+	    return result;
   }
 
-  // Do not change the parameters!
   public int rodCuttingBottomUp(int rodLength, int[] lengthPrices) {
-    return 0;
+	  int[] resultsArr = new int [rodLength+1];
+	    resultsArr[0] = 0;
+
+	    for (int i = 1; i<=rodLength; i++)
+	        {
+	            int max = Integer.MIN_VALUE;
+	            for (int j = 0; j < i; j++)
+	                max= Math.max(max,lengthPrices[j] + resultsArr[i-j-1]);
+	            resultsArr[i] = max;
+	        }
+
+	        return resultsArr[rodLength];
   }
 
 
